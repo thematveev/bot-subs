@@ -29,7 +29,7 @@ ADMIN_ID = 367335715         # Приведен к int
 
 # АДРЕС ВАШЕГО СЕРВЕРА (ОБЯЗАТЕЛЬНО ИЗМЕНИТЬ ДЛЯ РАБОТЫ WAYFORPAY)
 # WayForPay будет слать сюда уведомления. Должен быть HTTPS.
-BASE_WEBHOOK_URL = "https://your-ip-or-domain.com" 
+BASE_WEBHOOK_URL = "https://bot-subs.onrender.com" 
 WEBHOOK_PATH = "/wayforpay/callback"
 
 # Цены (в валюте мерчанта, UAH)
