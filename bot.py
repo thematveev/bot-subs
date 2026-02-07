@@ -118,16 +118,17 @@ async def get_payment_url(user_id, tariff_key):
     return None, None
 
 async def cancel_wfp_subscription(order_ref):
-    """ 
-    Отмена регулярного платежа.
-    Используется метод REMOVE в regularApi с передачей пароля.
-    """
     if not order_ref: return False
+
+    # --- ИСПРАВЛЕНИЕ: Хешируем пароль в MD5 ---
+    import hashlib
+    password_hash = hashlib.md5(MERCHANT_SECRET.encode('utf-8')).hexdigest()
+    # ------------------------------------------
 
     payload = {
         "requestType": "REMOVE",
         "merchantAccount": MERCHANT_ACCOUNT,
-        "merchantPassword": MERCHANT_SECRET, # Прямой пароль (Secret Key)
+        "merchantPassword": password_hash, # Передаем 32-символьный хеш
         "orderReference": order_ref
     }
 
@@ -135,7 +136,6 @@ async def cancel_wfp_subscription(order_ref):
 
     async with aiohttp.ClientSession() as session:
         try:
-            # Важно: WayForPay иногда капризен к Content-Type, поэтому json=payload подходит лучше всего
             async with session.post(url, json=payload) as response:
                 text_response = await response.text()
                 logging.info(f"Cancel WFP Response: {text_response}")
@@ -143,25 +143,18 @@ async def cancel_wfp_subscription(order_ref):
                 try:
                     data = json.loads(text_response)
                 except:
-                    logging.error(f"Cancel Failed: Invalid JSON response")
                     return False
 
-                # Проверка успеха
-                # Успешный код часто пустой или "Ok" в поле reason
-                reason = data.get("reason", "").lower()
-                code = str(data.get("reasonCode", ""))
-                
-                # 4100 - это стандартный код успеха для Regular API
-                # 1100 - для основного API
-                if code == "4100" or reason == "ok" or code == "1100":
+                if str(data.get("reasonCode")) == "4100" or data.get("reason") == "Ok": 
                     return True
                 
-                logging.error(f"Cancel failed: {code} - {data.get('reason')}")
+                logging.error(f"Cancel failed: {data.get('reasonCode')} - {data.get('reason')}")
                 return False
                 
         except Exception as e:
             logging.error(f"Cancel API Connection Error: {e}")
             return False
+
 
 
 # ==========================================
