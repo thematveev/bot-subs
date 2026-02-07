@@ -132,17 +132,34 @@ async def cancel_wfp_subscription(order_ref):
         "merchantSignature": signature
     }
 
+    # ИСПОЛЬЗУЙТЕ ЭТОТ URL (regularApi)
+    url = "https://api.wayforpay.com/regularApi" 
+
     async with aiohttp.ClientSession() as session:
         try:
-            async with session.post("https://api.wayforpay.com/api", json=payload) as response:
-                data = await response.json()
-                logging.info(f"Cancel WFP: {data}")
-                # 1100 = Успешно удален
-                if data.get("reasonCode") == 1100: return True
+            async with session.post(url, json=payload) as response:
+                # Читаем текст ответа для отладки
+                text_response = await response.text()
+                logging.info(f"Cancel WFP Raw Response: {text_response}")
+                
+                # Пытаемся распарсить JSON, игнорируя mimetype
+                try:
+                    data = json.loads(text_response)
+                except:
+                    # Если вернулся HTML или мусор
+                    return False
+
+                # Проверяем код ответа (1100 = ОК)
+                if data.get("reasonCode") == 1100: 
+                    return True
+                
+                logging.error(f"Cancel failed: {data.get('reason')}")
                 return False
+                
         except Exception as e:
-            logging.error(f"Cancel API Error: {e}")
+            logging.error(f"Cancel API Connection Error: {e}")
             return False
+
 
 # ==========================================
 # БОТ (КЛАВИАТУРЫ)
