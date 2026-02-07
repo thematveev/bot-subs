@@ -34,10 +34,10 @@ BASE_WEBHOOK_URL = os.getenv('BASE_WEBHOOK_URL', 'https://bot-subs.onrender.com'
 WEBHOOK_PATH = "/wayforpay/callback"
 
 TARIFFS = {
-    "1_month": {"name": "1 Месяц", "price": 100, "days": 30, "period": "monthly"},
-    "3_months": {"name": "3 Месяца", "price": 270, "days": 90, "period": "quarterly"},
-    "6_months": {"name": "6 Месяцев", "price": 500, "days": 180, "period": "halfyearly"},
-    "12_months": {"name": "1 Год", "price": 900, "days": 365, "period": "yearly"},
+    "1_month": {"name": "1 Месяц", "price": 1, "days": 30, "period": "monthly"},
+    "3_months": {"name": "3 Месяца", "price": 2, "days": 90, "period": "quarterly"},
+    "6_months": {"name": "6 Месяцев", "price": 5, "days": 180, "period": "halfyearly"},
+    "12_months": {"name": "1 Год", "price": 9, "days": 365, "period": "yearly"},
 }
 
 # ==========================================
@@ -118,42 +118,45 @@ async def get_payment_url(user_id, tariff_key):
     return None, None
 
 async def cancel_wfp_subscription(order_ref):
-    """ Отмена регулярного платежа (REMOVE_REGULAR) """
+    """ 
+    Отмена регулярного платежа.
+    Используется метод REMOVE в regularApi с передачей пароля.
+    """
     if not order_ref: return False
 
-    sign_str = f"{MERCHANT_ACCOUNT};{order_ref}"
-    signature = generate_signature(sign_str)
-
     payload = {
-        "apiVersion": 1,
-        "transactionType": "REMOVE_REGULAR",
+        "requestType": "REMOVE",
         "merchantAccount": MERCHANT_ACCOUNT,
-        "orderReference": order_ref,
-        "merchantSignature": signature
+        "merchantPassword": MERCHANT_SECRET, # Прямой пароль (Secret Key)
+        "orderReference": order_ref
     }
 
-    # ИСПОЛЬЗУЙТЕ ЭТОТ URL (regularApi)
     url = "https://api.wayforpay.com/regularApi" 
 
     async with aiohttp.ClientSession() as session:
         try:
+            # Важно: WayForPay иногда капризен к Content-Type, поэтому json=payload подходит лучше всего
             async with session.post(url, json=payload) as response:
-                # Читаем текст ответа для отладки
                 text_response = await response.text()
-                logging.info(f"Cancel WFP Raw Response: {text_response}")
+                logging.info(f"Cancel WFP Response: {text_response}")
                 
-                # Пытаемся распарсить JSON, игнорируя mimetype
                 try:
                     data = json.loads(text_response)
                 except:
-                    # Если вернулся HTML или мусор
+                    logging.error(f"Cancel Failed: Invalid JSON response")
                     return False
 
-                # Проверяем код ответа (1100 = ОК)
-                if data.get("reasonCode") == 1100: 
+                # Проверка успеха
+                # Успешный код часто пустой или "Ok" в поле reason
+                reason = data.get("reason", "").lower()
+                code = str(data.get("reasonCode", ""))
+                
+                # 4100 - это стандартный код успеха для Regular API
+                # 1100 - для основного API
+                if code == "4100" or reason == "ok" or code == "1100":
                     return True
                 
-                logging.error(f"Cancel failed: {data.get('reason')}")
+                logging.error(f"Cancel failed: {code} - {data.get('reason')}")
                 return False
                 
         except Exception as e:
