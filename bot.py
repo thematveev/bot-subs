@@ -233,21 +233,26 @@ async def msg_profile(message: types.Message):
     if user.is_active and user.expiry_date and user.expiry_date > datetime.now():
         status = "✅ АКТИВНА"
         date_str = user.expiry_date.strftime('%d.%m.%Y')
+        
+        # Используем HTML, так как он безопаснее для ссылок и имен с подчеркиваниями
         text = (
-            f"👤 **Ваш профиль**\n\n"
+            f"👤 <b>Ваш профиль</b>\n\n"
             f"Статус подписки: {status}\n"
             f"Истекает: {date_str}\n"
             f"Тариф: {user.tariff}\n\n"
             f"🔗 Ваша ссылка: {user.invite_link or 'Нет'}"
         )
-        # Показываем кнопку отмены только если активен
-        await message.answer(text, parse_mode="Markdown", reply_markup=get_profile_keyboard(user.id))
+        
+        # Меняем parse_mode на HTML
+        await message.answer(text, parse_mode="HTML", reply_markup=get_profile_keyboard(user.id))
     else:
         status = "❌ НЕ АКТИВНА"
         await message.answer(
-            f"👤 **Ваш профиль**\n\nСтатус: {status}\nДля доступа купите подписку.",
+            f"👤 <b>Ваш профиль</b>\n\nСтатус: {status}\nДля доступа купите подписку.",
+            parse_mode="HTML",
             reply_markup=get_tariffs_keyboard()
         )
+
 
 @dp.message(F.text == "🆘 Поддержка")
 async def msg_support(message: types.Message):
