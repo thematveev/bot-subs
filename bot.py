@@ -131,7 +131,7 @@ async def cancel_wfp_subscription(order_ref):
         "requestType": "REMOVE",
         "merchantAccount": MERCHANT_ACCOUNT,
         "orderReference": order_ref,
-        "merchantSignature": signature 
+        "merchantPassword": signature 
     }
 
     url = "https://api.wayforpay.com/regularApi" 
