@@ -118,18 +118,20 @@ async def get_payment_url(user_id, tariff_key):
     return None, None
 
 async def cancel_wfp_subscription(order_ref):
+    """ Отмена регулярного платежа через regularApi с использованием подписи """
     if not order_ref: return False
 
-    # --- ИСПРАВЛЕНИЕ: Хешируем пароль в MD5 ---
-    import hashlib
-    password_hash = hashlib.md5(MERCHANT_SECRET.encode('utf-8')).hexdigest()
-    # ------------------------------------------
+    # 1. Формируем подпись: merchantAccount;orderReference
+    sign_str = f"{MERCHANT_ACCOUNT};{order_ref}"
+    signature = generate_signature(sign_str)
 
+    # 2. Payload БЕЗ пароля, но с подписью
     payload = {
+        "apiVersion": 1,
         "requestType": "REMOVE",
         "merchantAccount": MERCHANT_ACCOUNT,
-        "merchantPassword": password_hash, # Передаем 32-символьный хеш
-        "orderReference": order_ref
+        "orderReference": order_ref,
+        "merchantSignature": signature 
     }
 
     url = "https://api.wayforpay.com/regularApi" 
@@ -145,6 +147,7 @@ async def cancel_wfp_subscription(order_ref):
                 except:
                     return False
 
+                # 4100 - ОК для regularApi
                 if str(data.get("reasonCode")) == "4100" or data.get("reason") == "Ok": 
                     return True
                 
@@ -154,6 +157,7 @@ async def cancel_wfp_subscription(order_ref):
         except Exception as e:
             logging.error(f"Cancel API Connection Error: {e}")
             return False
+
 
 
 
