@@ -86,7 +86,8 @@ async def get_payment_url(user_id, tariff_key):
         'clientLastname': "User",
         'serviceUrl': BASE_WEBHOOK_URL + WEBHOOK_PATH,
         'merchantSignature': signature,
-        'regularOn': 1
+        'regularOn': 1,
+        'regularBehavior': 'preset'
     }
     
     if 'period' in tariff:
