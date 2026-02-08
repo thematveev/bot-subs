@@ -17,3 +17,6 @@ TARIFFS = {
     "6_months": {"name": "6 Месяцев", "price": 5, "days": 180, "period": "halfyearly"},
     "12_months": {"name": "1 Год", "price": 9, "days": 365, "period": "yearly"},
 }
+
+for i in [MERCHANT_ACCOUNT, MERCHANT_SECRET, MERCHANT_PASSWORD, TG_API_TOKEN, CHANNEL_ID, ADMIN_ID, BASE_WEBHOOK_URL]:
+    print(i)
