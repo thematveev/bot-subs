@@ -5,8 +5,8 @@ MERCHANT_SECRET = os.getenv('MERCHANT_SECRET', 'flk3409refn54t54t*FNJRET')
 MERCHANT_PASSWORD = os.getenv('MERCHANT_PASSWORD', 'flk3409refn54t54t*FNJRET')
 TG_API_TOKEN = os.getenv('TG_API_TOKEN', '8198828061:AAE-pKTb0lSgJ3E9w1_m29uQyd_KZum9yLc')
 
-CHANNEL_ID = os.getenv('CHANNEL_ID', '-1003690130785')
-ADMIN_ID = os.getenv('ADMIN_ID', '367335715')
+CHANNEL_ID = int(os.getenv('CHANNEL_ID', '-1003690130785'))
+ADMIN_ID = int(os.getenv('ADMIN_ID', '367335715'))
 
 BASE_WEBHOOK_URL = os.getenv('BASE_WEBHOOK_URL', 'https://bot.thematveev.xyz') 
 WEBHOOK_PATH = "/wayforpay/callback"
