@@ -114,7 +114,7 @@ async def get_payment_url(user_id, tariff_key):
     product_name = f"Subscription {tariff.get('name_ru', tariff_key)}"
     
     # 1. Формируем строку подписи
-    sign_list = [MERCHANT_ACCOUNT, "t.me/Bot", order_ref, order_date, amount, "UAH", product_name, 1, amount]
+    sign_list = [MERCHANT_ACCOUNT, 't.me/lesya_kovalchuk_2026_bot', order_ref, order_date, amount, "EUR", product_name, 1, amount]
     sign_str = ";".join(map(str, sign_list))
     signature = generate_signature(sign_str)
 
