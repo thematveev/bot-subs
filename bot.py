@@ -225,7 +225,7 @@ def get_tariffs_keyboard(lang="ru"):
     for key, data in TARIFFS.items():
         # Берем название на языке пользователя или дефолтное
         name = data.get(f"name_{lang}", data.get("name_ru", key))
-        text = f"{name} - {data['price']} UAH"
+        text = f"{name} - {data['price']} EUR"
         kb.append([InlineKeyboardButton(text=text, callback_data=f"buy_{key}")])
     return InlineKeyboardMarkup(inline_keyboard=kb)
 
