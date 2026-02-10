@@ -14,10 +14,10 @@ WEBHOOK_PATH = "/wayforpay/callback"
 
 # Тарифы (можно тоже локализовать, но для простоты оставим названия универсальными или добавим переводы)
 TARIFFS = {
-    "1_month": {"name_ru": "1 Месяц", "name_ua": "1 Місяць", "price": 1, "days": 30, "period": "monthly"},
-    "3_months": {"name_ru": "3 Месяца", "name_ua": "3 Місяці", "price": 2, "days": 90, "period": "quarterly"},
-    "6_months": {"name_ru": "6 Месяцев", "name_ua": "6 Місяців", "price": 5, "days": 180, "period": "halfyearly"},
-    "12_months": {"name_ru": "1 Год", "name_ua": "1 Рік", "price": 9, "days": 365, "period": "yearly"},
+    "1_month": {"name_ru": "1 Месяц", "name_ua": "1 Місяць", "price": 59, "days": 30, "period": "monthly"},
+    "3_months": {"name_ru": "3 Месяца", "name_ua": "3 Місяці", "price": 129, "days": 90, "period": "quarterly"},
+    "6_months": {"name_ru": "6 Месяцев", "name_ua": "6 Місяців", "price": 249, "days": 180, "period": "halfyearly"},
+    "12_months": {"name_ru": "1 Год", "name_ua": "1 Рік", "price": 449, "days": 365, "period": "yearly"},
 }
 
 # --- ЛОКАЛИЗАЦИЯ ---

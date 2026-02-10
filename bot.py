@@ -122,11 +122,11 @@ async def get_payment_url(user_id, tariff_key):
     payload = {
         'merchantAccount': MERCHANT_ACCOUNT,
         'merchantAuthType': 'SimpleSignature',
-        'merchantDomainName': 't.me/Bot',
+        'merchantDomainName': 't.me/lesya_kovalchuk_2026_bot',
         'orderReference': order_ref,
         'orderDate': order_date,
         'amount': amount,
-        'currency': 'UAH',
+        'currency': 'EUR',
         'orderTimeout': 86400,
         'productName[]': product_name,
         'productPrice[]': amount,
