@@ -44,7 +44,7 @@ MESSAGES = {
         "btn_pay": "💳 Оплатить",
         "sub_extended": "✅ Подписка продлена до {date}!\nСсылка: {link}",
         "access_revoked": "⛔ Доступ закрыт.",
-        "support_text": "По всем вопросам пишите: @AdminUsername",
+        "support_text": "По всем вопросам пишите: @s_socolova",
         "language_selected": "🇷🇺 Язык установлен: Русский",
         "btn_change_lang": "🇷🇺/🇺🇦 Сменить язык"
     },
@@ -70,7 +70,7 @@ MESSAGES = {
         "btn_pay": "💳 Сплатити",
         "sub_extended": "✅ Підписку подовжено до {date}!\nПосилання: {link}",
         "access_revoked": "⛔ Доступ закрито.",
-        "support_text": "З усіх питань пишіть: @AdminUsername",
+        "support_text": "З усіх питань пишіть: @s_socolova",
         "language_selected": "🇺🇦 Мову встановлено: Українська",
         "btn_change_lang": "🇷🇺/🇺🇦 Змінити мову"
     }
